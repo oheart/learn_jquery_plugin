@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+	*{margin:0;padding:0;}
+    </style>
+    <script>
+
+    </script>
+</head>
+<body>
+<script src="js/jquery.js"></script>
+<script>
+    (function(){
+        var a = 10;
+        function $(){
+            alert(a);
+        }
+//        把$()函数挂载到window上，在外面可以访问
+        window.$ = $;
+    })();
+//    console.log(a);
+    $();
+
+
+//    $() jQuery()
+</script>
+
+</body>
+</html>

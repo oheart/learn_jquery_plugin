@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+	*{margin:0;padding:0;}
+    </style>
+    <script>
+
+    </script>
+</head>
+<body>
+<script src="js/jquery.js"></script>
+<script>
+
+//一、jQuery的无new构建
+
+//	（1）如何返回一个正确的实例
+	var aQuery = function(selector,context){
+		return aQuery.prototype.init();
+	}
+	aQuery.prototype = {
+		init:function(){
+			return this;
+		},
+		name:function(){},
+		age:function(){}
+	}
+	console.log(aQuery());  //Object {init: function, name: function, age: function}
+
+/*aQuery()返回的是aQuery类的实例，那么在init中的this其实也是指向的aQuery类的实例，
+问题来了init的this指向的是aQuery类，如果把init函数也当做一个构造器，那么内部的this要如何处理？*/
+
+var aQuery  = function(selector,context){
+	return aQuery.prototype.init();
+}
+aQuery.prototype = {
+	init: function(){
+		this.age = 18;
+		return this;
+	},
+	name: function(){},
+	age: 20
+}
+console.log(aQuery().age);  //18
+
+//这种情况下就出错了，因为this只是指向aQuery类的，所以需要设计出独立的作用域才行。
+
+//(2)jQuery框架分割作用域的处理
+jQuery = function(selector,context){
+	return new jQuery.fn.init(selector,context,rootjQuery);
+}
+//很明显，通过实例init函数，每次都构建新的init实例对象，来分割this,避免交互混淆
+var aQuery = function(selector,context){
+	return new aQuery.prototype.init();
+}
+aQuery.prototype = {
+	init: function(){
+		this.age = 18;
+		return this;
+	},
+	name: function(){},
+	age: 20
+}
+
+//Uncaught TypeError: aQuery(...).name is not a function
+//console.log(aQuery().name());
+
+//抛出错误，无法找到这个方法，所以很明显new的init跟jquery类的this分离了。
+
+
+//(2)如何访问jQuery类原型上的属性与方法
+//	如何做到既能隔离作用域还能使用jQuery原型对象的作用域呢，还能在返回实例中访问jQuery的原型对象？
+
+//实现关键点
+//	jQuery.fn.init.prototype = jQuery.fn;
+
+//通过原型传递解决问题，把jQuery的原型传递给jQuery.prototype.init.prototype
+//换句话说jQuery的原型对象覆盖了init构造器的原型对象
+//因为是引用传递所以不需要担心这个循环引用的性能问题
+var aQuery = function(selector,context){
+	return new aQuery.prototype.init();
+}
+aQuery.prototype = {
+	init: function(){
+		return this;
+	},
+	name: function(){
+		return this.age;
+	},
+	age: 20
+}
+aQuery.prototype.init.prototype = aQuery.prototype;
+console.log(aQuery().name()); //20
+jquery.fn.init.prototype = jquery.fn;
+
+
+
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>

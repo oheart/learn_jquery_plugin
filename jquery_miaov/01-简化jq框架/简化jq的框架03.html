@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script src="js/jquery.js"></script>
+<script>
+//回调函数 --函数的统一管理
+
+function fn1(){
+    alert(1);
+}
+function fn2(){
+    alert(2);
+}
+var cb = $.Callbacks();
+cb.add(fn1);
+cb.add(fn2);
+cb.fire();   //1,2
+
+cb.remove(fn2);
+cb.fire(); //1
+
+</script>
+</body>
+</html>

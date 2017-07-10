@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script src="js/jquery.js"></script>
+<script>
+//    一、jquery是基于对象的
+//    jq中的用法
+    $("#div1").css();
+    $("#div1").html();
+
+
+//类似
+    var arr = new Array();
+    arr.push();
+    arr.sort();
+
+
+
+//二、jq中两种调用方法
+$().css()
+            -----   实例方法--只能给jq对象用
+$().html()
+
+
+
+$.trim()
+           -----  扩展静态属性和静态方法---扩展工具方法，既能给jq对象用，还能给原生对象用
+$.proxy()
+
+
+//三、复杂选择器
+$('ul li + p input.class')
+
+</script>
+</body>
+</html>

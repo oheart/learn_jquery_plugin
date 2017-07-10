@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="div1"></div>
+<script src="js/jquery.js"></script>
+<script>
+//一、data数据缓存
+$("#div1").data('name','hello');
+console.log($("#div1").data());  //hello
+
+
+//二、queue队列
+//利用入队出队实现下面的运动
+$("#div1").animate({left:100});
+$("#div1").animate({top:100});
+$("#div1").animate({width:300});
+</script>
+</body>
+</html>

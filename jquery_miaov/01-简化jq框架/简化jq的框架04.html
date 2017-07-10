@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script src="js/jquery.js"></script>
+<script>
+//延迟对象 -- 利用回调去做
+/*
+    setTimeout(function(){
+        alert(1);
+    },1000);
+    alert(2);
+*/
+
+
+var dfd = $.Deferred();
+setTimeout(function(){
+    alert(1);
+    dfd.resolve();  //当调用这句话的时候去调用dfd.done(function(){alert(2)});
+});
+dfd.done(function(){
+    alert(2);
+});
+
+</script>
+</body>
+</html>
