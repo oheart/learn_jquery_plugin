@@ -1,0 +1,129 @@
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>carousel1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .carousel {
+            position: relative;
+            width: 310px;
+            height: 206px;
+            overflow: hidden;
+            margin: 20px auto 0;
+        }
+
+        .carousel .img-ct {
+            position: relative;
+            top: 0;
+            left: 0;
+            font-size: 0;
+        }
+
+        .carousel .img-ct li {
+            display: inline-block;
+        }
+
+        .arrow {
+            position: absolute;
+            top: 50%;
+            margin-top: -15px;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            background: #4E443C;
+            color: #FFF;
+            border-radius: 30px;
+            box-shadow: 0 0 2px #999;
+            opacity: 0.8;
+        }
+
+        .arrow:hover {
+            opacity: 1;
+        }
+
+        .pre {
+            left: 10px;
+        }
+
+        .next {
+            right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="carousel">
+        <ul class="img-ct">
+            <li>
+                <a href="#">
+                    <img src="imgs/1.jpg" height="206" width="310">
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="imgs/2.jpg" height="206" width="310">
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="imgs/3.jpg" height="206" width="310">
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="imgs/4.jpg" height="206" width="310">
+                </a>
+            </li>
+        </ul>
+        <a class="pre arrow" href="#"><</a>
+        <a class="next arrow" href="#">></a>
+    </div>
+    <script src="https://cdn.bootcss.com/jquery/2.1.2/jquery.js"></script>
+    <script>
+        var $ct = $('.img-ct'),
+            $liArr = $('.img-ct li'),
+            $pre = $('.pre'),
+            $next = $('.next'),
+            imgWidth = $liArr.width(),
+            imgSize = $liArr.size();
+
+        $ct.css('width', imgWidth * imgSize);
+
+        $next.on('click', function () {
+            $ct.animate({
+                'left': -imgWidth
+            }, function () {
+                $ct.append($ct.children().first());
+                $ct.css('left', 0)
+            })
+        })
+
+        $pre.on('click', function () {
+            $ct.prepend($ct.children().last());
+            $ct.css('left', -imgWidth);
+            $ct.animate({
+                'left': 0
+            })
+        })
+
+        // 存在的问题
+        // 1. 变量可能会重名--命名空间的问题
+        // 2. 无法复用(页面上有好多轮播)
+    </script>
+</body>
+
+</html>

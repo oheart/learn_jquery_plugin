@@ -1,0 +1,216 @@
+<html>
+        
+        <head>
+            <meta charset="UTF-8" />
+            <title>carousel4</title>
+            <style>
+                * {
+                    margin: 0;
+                    padding: 0;
+                }
+        
+                li {
+                    list-style: none;
+                }
+        
+                a {
+                    text-decoration: none;
+                }
+        
+                .carousel {
+                    position: relative;
+                    width: 310px;
+                    height: 206px;
+                    overflow: hidden;
+                    margin: 20px auto 0;
+                }
+        
+                .carousel .img-ct {
+                    position: relative;
+                    top: 0;
+                    left: 0;
+                    font-size: 0;
+                }
+        
+                .carousel .img-ct li {
+                    display: inline-block;
+                }
+        
+                .arrow {
+                    position: absolute;
+                    top: 50%;
+                    margin-top: -15px;
+                    width: 30px;
+                    height: 30px;
+                    line-height: 30px;
+                    text-align: center;
+                    background: #4E443C;
+                    color: #FFF;
+                    border-radius: 30px;
+                    box-shadow: 0 0 2px #999;
+                    opacity: 0.8;
+                }
+        
+                .arrow:hover {
+                    opacity: 1;
+                }
+        
+                .pre {
+                    left: 10px;
+                }
+        
+                .next {
+                    right: 10px;
+                }
+            </style>
+        </head>
+        
+        <body>
+            <!-- 轮播1 -->
+            <div class="carousel" id="c1">
+                <ul class="img-ct">
+                    <li>
+                        <a href="#">
+                            <img src="imgs/1.jpg" height="206" width="310">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="imgs/2.jpg" height="206" width="310">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="imgs/3.jpg" height="206" width="310">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="imgs/4.jpg" height="206" width="310">
+                        </a>
+                    </li>
+                </ul>
+                <a class="pre arrow" href="#"><</a>
+                <a class="next arrow" href="#">></a>
+            </div>
+            <!-- 轮播2 -->
+            <div class="carousel" id="c2">
+                    <ul class="img-ct">
+                        <li>
+                            <a href="#">
+                                <img src="imgs/1.jpg" height="206" width="310">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="imgs/2.jpg" height="206" width="310">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="imgs/3.jpg" height="206" width="310">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="imgs/4.jpg" height="206" width="310">
+                            </a>
+                        </li>
+                    </ul>
+                    <a class="pre arrow" href="#"><</a>
+                    <a class="next arrow" href="#">></a>
+                </div>
+            <script src="https://cdn.bootcss.com/jquery/2.1.2/jquery.js"></script>
+            <script>
+                var CarouselCenter = (function(){
+                    var carouseList = [];
+
+                    function init($carousel){
+                        $carousel.each(function(){
+                            var $cal = $(this);
+                            if($cal.hasClass('init')){
+                                return;
+                            }
+                            carouseList.push(new Carousel($cal))
+                            // 添加init类用来判断是否初始化过，如果初始化过就不在初始，避免多次初始化（比如滚动滚动条的时候）
+                            $cal.addClass('init');
+                        })
+                    }
+
+                    function getList(){
+                        return carouseList;
+                    }
+
+                    // 构造函数
+                    function Carousel($carousel){
+                        this.$carousel = $carousel;
+                            var $ct = this.$ct = $carousel.find('.img-ct');
+                            this.$pre = $carousel.find('.pre');
+                            this.$next = $carousel.find('.next');
+                            this.imgWidth = $ct.find('li').width();
+                            this.imgSize = $ct.find('li').size();
+            
+                            $ct.css('width', this.imgWidth * this.imgSize)
+                            this.bind();
+                    }
+
+                    Carousel.prototype = {
+                        bind: function () {
+                            var _this = this;
+                            this.$pre.on('click', function () {
+                                _this.showPre();
+                            })
+                            this.$next.on('click', function () {
+                                _this.showNext();
+                            })
+                        },
+                        showPre: function () {
+                            this.$ct.prepend(this.$ct.children().last())
+                            this.$ct.css('left', -this.imgWidth)
+                            this.$ct.animate({
+                                'left': 0
+                            })
+                        },
+                        showNext: function () {
+                            var $ct = this.$ct;
+                            $ct.animate({
+                                'left': -this.imgWidth
+                            }, function () {
+                                $ct.append($ct.children().first())
+                                $ct.css('left', 0)
+                            })
+                        }
+                    }
+
+                    return {
+                        init: init,
+                        getList: getList
+                    }
+
+                })()
+
+ 
+                // 解决了多次重复调用绑定冲突问题，还可以用类统一调用 -> CarouselCenter.init($('.carousel'))
+                CarouselCenter.init($('#c1'))
+                CarouselCenter.init($('#c2'))
+                CarouselCenter.init($('#c2'))
+
+                CarouselCenter.init($('.carousel'))
+
+                // console.log(CarouselCenter.getList())
+
+                // 轮播可以结合懒加载，利用Expose函数判断是否在可以区域，如果在则加载轮播--待实现
+                // Expose.bind($('.carousel'), function($el){
+                //     CarouselCenter.init($el);
+                // })
+
+                // 图片懒加载 -- 待实现
+                // Expose.bind($('img'), function($el){
+                //     $el.attr('src', $el.attr('data-src'))
+                // })
+
+                
+            </script>
+        </body>
+        
+        </html>

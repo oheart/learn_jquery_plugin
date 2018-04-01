@@ -1,0 +1,184 @@
+<html>
+        
+        <head>
+            <meta charset="UTF-8" />
+            <title>carousel3</title>
+            <style>
+                * {
+                    margin: 0;
+                    padding: 0;
+                }
+        
+                li {
+                    list-style: none;
+                }
+        
+                a {
+                    text-decoration: none;
+                }
+        
+                .carousel {
+                    position: relative;
+                    width: 310px;
+                    height: 206px;
+                    overflow: hidden;
+                    margin: 20px auto 0;
+                }
+        
+                .carousel .img-ct {
+                    position: relative;
+                    top: 0;
+                    left: 0;
+                    font-size: 0;
+                }
+        
+                .carousel .img-ct li {
+                    display: inline-block;
+                }
+        
+                .arrow {
+                    position: absolute;
+                    top: 50%;
+                    margin-top: -15px;
+                    width: 30px;
+                    height: 30px;
+                    line-height: 30px;
+                    text-align: center;
+                    background: #4E443C;
+                    color: #FFF;
+                    border-radius: 30px;
+                    box-shadow: 0 0 2px #999;
+                    opacity: 0.8;
+                }
+        
+                .arrow:hover {
+                    opacity: 1;
+                }
+        
+                .pre {
+                    left: 10px;
+                }
+        
+                .next {
+                    right: 10px;
+                }
+            </style>
+        </head>
+        
+        <body>
+            <!-- 轮播1 -->
+            <div class="carousel" id="c1">
+                <ul class="img-ct">
+                    <li>
+                        <a href="#">
+                            <img src="imgs/1.jpg" height="206" width="310">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="imgs/2.jpg" height="206" width="310">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="imgs/3.jpg" height="206" width="310">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="imgs/4.jpg" height="206" width="310">
+                        </a>
+                    </li>
+                </ul>
+                <a class="pre arrow" href="#"><</a>
+                <a class="next arrow" href="#">></a>
+            </div>
+            <!-- 轮播2 -->
+            <div class="carousel" id="c2">
+                    <ul class="img-ct">
+                        <li>
+                            <a href="#">
+                                <img src="imgs/1.jpg" height="206" width="310">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="imgs/2.jpg" height="206" width="310">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="imgs/3.jpg" height="206" width="310">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="imgs/4.jpg" height="206" width="310">
+                            </a>
+                        </li>
+                    </ul>
+                    <a class="pre arrow" href="#"><</a>
+                    <a class="next arrow" href="#">></a>
+                </div>
+            <script src="https://cdn.bootcss.com/jquery/2.1.2/jquery.js"></script>
+            <script>
+                // 构造函数
+                function Carousel($carousel){
+                    this.$carousel = $carousel;
+                        var $ct = this.$ct = $carousel.find('.img-ct');
+                        this.$pre = $carousel.find('.pre');
+                        this.$next = $carousel.find('.next');
+                        this.imgWidth = $ct.find('li').width();
+                        this.imgSize = $ct.find('li').size();
+        
+                        $ct.css('width', this.imgWidth * this.imgSize)
+                        this.bind();
+                }
+
+
+                Carousel.prototype = {
+                    bind: function () {
+                        var _this = this;
+                        this.$pre.on('click', function () {
+                            _this.showPre();
+                        })
+                        this.$next.on('click', function () {
+                            _this.showNext();
+                        })
+                    },
+                    showPre: function () {
+                        this.$ct.prepend(this.$ct.children().last())
+                        this.$ct.css('left', -this.imgWidth)
+                        this.$ct.animate({
+                            'left': 0
+                        })
+                    },
+                    showNext: function () {
+                        var $ct = this.$ct;
+                        $ct.animate({
+                            'left': -this.imgWidth
+                        }, function () {
+                            $ct.append($ct.children().first())
+                            $ct.css('left', 0)
+                        })
+                    }
+                }
+
+                // var c1 = new Carousel($('#c1'))
+                // var c2 = new Carousel($('#c2'))
+        
+                // 同样的，可以用class实现
+                $('.carousel').each(function(){
+                    new Carousel($(this))
+                })
+
+                // 如果同时再写个c2,c2的轮播执行了两次就会出问题，c2跳了两次
+                // var c2 = new Carousel($('#c2'))
+
+
+               // 而且不能像下面这样使用
+               // new Carousel($('.carousel'))
+            </script>
+        </body>
+        
+        </html>
